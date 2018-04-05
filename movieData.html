@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+* {box-sizing: border-box;}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #e9e9e9;
+}
+.topnav .search-container {
+  float: left;
+}
+.topnav input[type=text]{
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+
+}
+.topnav .search-container button {
+  float: left;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+.topnav .search-container button:hover {
+  background: #ccc;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="search-container">
+  <input type="text" placeholder="Enter movie title.." name="search" id="movieName">
+    <button class="btn btn-primary" onClick="viewMovies()">Search</button>
+  </div>
+</div>
+<div>
+  <h2>Movie Details</h2>
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Year</th>
+      <th>Genre</th>
+      <th>Rated</th>
+      <th>Actors</th>
+      <th>Poster</th>
+    </tr>
+    <tr>
+      <td id="movieTitle"></td>
+      <td id="year"></td>
+      <td id="genre"></td>
+      <td id="restriction"></td>
+      <td id="stars"></td>
+      <td><img id='poster' width="324" height="228"></img></td>
+    </tr>
+
+  </table>
+</div>
+<script>
+const movieTitle = document.getElementById("movieTitle");
+const movieName = document.getElementById("movieName");
+let poster = document.getElementById("poster");
+
+function viewMovies() {
+  fetch('http://www.omdbapi.com/?t=' + movieName.value +'&apikey=601be9b8').then(response =>{
+    if(response.ok){
+      return response.json();
+    }
+    throw new Error("Request Failed!");
+    }, networkError => console.log(networkError.message)
+  ).then(jsonResponse => {
+      movieTitle.textContent = jsonResponse.Title;
+      year.textContent = jsonResponse.Year;
+      genre.textContent = jsonResponse.Genre;
+      restriction.textContent = jsonResponse.Rated;
+      stars.textContent = jsonResponse.Actors;
+      poster.src = jsonResponse.Poster;
+      })
+};
+
+</script>
+</body>
+</html>
