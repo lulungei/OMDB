@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 * {box-sizing: border-box;}
@@ -17,29 +18,56 @@ body {
   float: left;
 }
 .topnav input[type=text]{
-  padding: 6px;
-  margin-top: 8px;
+  padding: 10px;
   font-size: 17px;
-  border: none;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
 
+}
+.topnav input[type=text]:focus {
+  width: 100;
 }
 .topnav .search-container button {
   float: left;
-  padding: 6px 10px;
-  margin-top: 8px;
-  margin-right: 16px;
-  background: #ddd;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
   font-size: 17px;
-  border: none;
+  border: 1px solid grey;
+  border-left: none;
   cursor: pointer;
 }
 .topnav .search-container button:hover {
   background: #ccc;
 }
+ *{
+    box-sizing: border-box;
+ }
+ /* Create two columns that floats next to each other*/
+ .column {
+  float: left;
+  padding: 10px;
+
+ }
+ 
+ .row:after {
+  content: "";
+  display: table;
+  clear: both;
+ }
+
+ /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 100%;
 }
 
 td, th {
@@ -58,11 +86,12 @@ tr:nth-child(even) {
 <div class="topnav">
   <div class="search-container">
   <input type="text" placeholder="Enter movie title.." name="search" id="movieName">
-    <button class="btn btn-primary" onClick="viewMovies()">Search</button>
+    <button class="btn btn-primary" onClick="viewMovies()"><i class="fa fa-search"></i>
+    </button>
   </div>
 </div>
-<div>
   <h2>Movie Details</h2>
+  <div class="row">
   <table>
     <tr>
       <th>Title</th>
@@ -70,7 +99,6 @@ tr:nth-child(even) {
       <th>Genre</th>
       <th>Rated</th>
       <th>Actors</th>
-      <th>Poster</th>
     </tr>
     <tr>
       <td id="movieTitle"></td>
@@ -78,10 +106,12 @@ tr:nth-child(even) {
       <td id="genre"></td>
       <td id="restriction"></td>
       <td id="stars"></td>
-      <td><img id='poster' width="324" height="228"></img></td>
     </tr>
 
   </table>
+</div>
+<div class="column">
+<img id='poster'></img>
 </div>
 <script>
 const movieTitle = document.getElementById("movieTitle");
@@ -96,13 +126,18 @@ function viewMovies() {
     throw new Error("Request Failed!");
     }, networkError => console.log(networkError.message)
   ).then(jsonResponse => {
+      if(jsonResponse.Response==="False"){
+        alert ("Sorry, this movie does not exist");
+      }
+        else{
       movieTitle.textContent = jsonResponse.Title;
       year.textContent = jsonResponse.Year;
       genre.textContent = jsonResponse.Genre;
       restriction.textContent = jsonResponse.Rated;
       stars.textContent = jsonResponse.Actors;
       poster.src = jsonResponse.Poster;
-      })
+        }
+    })
 };
 
 </script>
